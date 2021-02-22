@@ -1,7 +1,9 @@
 package ecommerce.restConfiguration;
 
+import ecommerce.entities.Country;
 import ecommerce.entities.Product;
 import ecommerce.entities.ProductCategory;
+import ecommerce.entities.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -30,18 +32,20 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
 
         HttpMethod [] unsupportedMethods = {HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE};
 
-        config.getExposureConfiguration()
-                .forDomainType(Product.class)
-                .withItemExposure((metdata, httpMethods) -> httpMethods.disable(unsupportedMethods))
-                .withCollectionExposure((metdata, httpMethods) -> httpMethods.disable(unsupportedMethods));
-
-        config.getExposureConfiguration()
-                .forDomainType(ProductCategory.class)
-                .withItemExposure((metdata, httpMethods) -> httpMethods.disable(unsupportedMethods))
-                .withCollectionExposure((metdata, httpMethods) -> httpMethods.disable(unsupportedMethods));
+        readOnly(Product.class, config, unsupportedMethods);
+        readOnly(ProductCategory.class, config, unsupportedMethods);
+        readOnly(Country.class, config, unsupportedMethods);
+        readOnly(State.class, config, unsupportedMethods);
 
         exposeIds(config);
 
+    }
+
+    private void readOnly(Class theClass, RepositoryRestConfiguration config, HttpMethod[] unsupportedMethods) {
+        config.getExposureConfiguration()
+                .forDomainType(theClass)
+                .withItemExposure((metdata, httpMethods) -> httpMethods.disable(unsupportedMethods))
+                .withCollectionExposure((metdata, httpMethods) -> httpMethods.disable(unsupportedMethods));
     }
 
     private void exposeIds(RepositoryRestConfiguration config){
