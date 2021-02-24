@@ -30,7 +30,7 @@ public class Customer {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
     private Set<Order> orders = new HashSet<>();
 
-    public void add(Order order){
+    public void addOrder(Order order){
 
         if(orders == null){
 
