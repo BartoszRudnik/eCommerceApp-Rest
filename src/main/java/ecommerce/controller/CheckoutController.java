@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/checkout")
 public class CheckoutController {
 
-    private CheckoutService checkoutService;
+    private final CheckoutService checkoutService;
 
     @Autowired
     public CheckoutController(CheckoutService checkoutService){
@@ -23,9 +23,7 @@ public class CheckoutController {
     @PutMapping("/purchase")
     public PurchaseResponse placeOrder(@RequestBody Purchase purchase){
 
-        PurchaseResponse purchaseResponse = checkoutService.placeOrder(purchase);
-
-        return purchaseResponse;
+        return checkoutService.placeOrder(purchase);
 
     }
 
