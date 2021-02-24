@@ -6,9 +6,9 @@ import ecommerce.service.CheckoutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/checkout")
+@CrossOrigin
 public class CheckoutController {
 
     private final CheckoutService checkoutService;
@@ -20,7 +20,7 @@ public class CheckoutController {
 
     }
 
-    @PutMapping("/purchase")
+    @PostMapping("/purchase")
     public PurchaseResponse placeOrder(@RequestBody Purchase purchase){
 
         return checkoutService.placeOrder(purchase);
