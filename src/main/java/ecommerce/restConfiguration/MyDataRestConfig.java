@@ -5,6 +5,7 @@ import ecommerce.entities.Product;
 import ecommerce.entities.ProductCategory;
 import ecommerce.entities.State;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
@@ -20,6 +21,9 @@ import java.util.Set;
 @Configuration
 public class MyDataRestConfig implements RepositoryRestConfigurer {
 
+    @Value("${allowed.origins}")
+    private String [] myAllowedOrigins;
+
     private final EntityManager entityManager;
 
     @Autowired
@@ -30,7 +34,7 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors){
 
-        HttpMethod [] unsupportedMethods = {HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE};
+        HttpMethod [] unsupportedMethods = {HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PATCH};
 
         readOnly(Product.class, config, unsupportedMethods);
         readOnly(ProductCategory.class, config, unsupportedMethods);
@@ -38,6 +42,8 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
         readOnly(State.class, config, unsupportedMethods);
 
         exposeIds(config);
+
+        cors.addMapping(config.getBasePath() + "/**").allowedOrigins(myAllowedOrigins);
 
     }
 
